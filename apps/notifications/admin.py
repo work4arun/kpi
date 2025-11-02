@@ -1,0 +1,23 @@
+
+"""
+Admin configuration for notifications app
+"""
+from django.contrib import admin
+from apps.notifications.models import Notification
+
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('recipient', 'title', 'notification_type', 'is_read', 'created_at')
+    list_filter = ('notification_type', 'is_read', 'created_at')
+    search_fields = ('recipient__full_name', 'title', 'message')
+    ordering = ('-created_at',)
+    
+    fieldsets = (
+        (None, {'fields': ('recipient', 'title', 'message', 'link')}),
+        ('Type & Status', {'fields': ('notification_type', 'is_read', 'read_at')}),
+        ('Related Objects', {'fields': ('related_submission',)}),
+        ('Timestamps', {'fields': ('created_at', 'updated_at')}),
+    )
+    
+    readonly_fields = ('created_at', 'updated_at', 'read_at')

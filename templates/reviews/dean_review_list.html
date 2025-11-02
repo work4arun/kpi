@@ -1,0 +1,37 @@
+
+{% extends 'base.html' %}
+{% block title %}Dean Review{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Dean Review - Final Approval</h1>
+<div class="bg-white shadow rounded-lg p-6">
+    <h2 class="text-xl font-semibold mb-4">Faculty for Approval ({{ month }}/{{ year }})</h2>
+    <table class="table-auto">
+        <thead>
+            <tr>
+                <th>Faculty</th>
+                <th>Department</th>
+                <th>Submissions</th>
+                <th>Total Points</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in faculty_data %}
+            <tr>
+                <td>{{ data.faculty.full_name }}</td>
+                <td>{{ data.faculty.department.name }}</td>
+                <td>{{ data.submission_count }}</td>
+                <td>{{ data.total_points|floatformat:2 }}</td>
+                <td>
+                    <a href="{% url 'reviews:dean_approve_faculty' data.faculty.pk %}?month={{ month }}&year={{ year }}" class="btn-primary text-sm">
+                        Approve
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center">No faculty pending approval</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

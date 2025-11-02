@@ -1,0 +1,429 @@
+
+{% extends 'base.html' %}
+{% block title %}HoD Dashboard{% endblock %}
+
+{% block content %}
+<!-- HoD Dashboard with AWS-Inspired Design -->
+<div class="animate-fade-in">
+    <!-- Page Header -->
+    <div class="mb-2xl">
+        <h1 class="text-5xl font-bold mb-md" style="color: var(--text-primary); letter-spacing: -0.02em;">
+            Head of Department Dashboard
+        </h1>
+        <p class="text-lg" style="color: var(--text-secondary);">
+            Monitor department performance, faculty metrics, and team progress
+        </p>
+        <div class="aws-divider"></div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="aws-card mb-2xl animate-fade-in-up" style="background: var(--aws-dark); color: white;">
+        <div class="flex items-center mb-lg">
+            <div class="h-8 w-1 mr-3" style="background: var(--aws-orange);"></div>
+            <h2 class="text-2xl font-bold" style="color: white;">Filter Dashboard Data</h2>
+        </div>
+        <form method="GET" action="" class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+            <div class="aws-form-group">
+                <label for="month" class="aws-form-label" style="color: rgba(255,255,255,0.9);">Month</label>
+                <select name="month" id="month" class="aws-form-select">
+                    <option value="1" {% if month == 1 %}selected{% endif %}>January</option>
+                    <option value="2" {% if month == 2 %}selected{% endif %}>February</option>
+                    <option value="3" {% if month == 3 %}selected{% endif %}>March</option>
+                    <option value="4" {% if month == 4 %}selected{% endif %}>April</option>
+                    <option value="5" {% if month == 5 %}selected{% endif %}>May</option>
+                    <option value="6" {% if month == 6 %}selected{% endif %}>June</option>
+                    <option value="7" {% if month == 7 %}selected{% endif %}>July</option>
+                    <option value="8" {% if month == 8 %}selected{% endif %}>August</option>
+                    <option value="9" {% if month == 9 %}selected{% endif %}>September</option>
+                    <option value="10" {% if month == 10 %}selected{% endif %}>October</option>
+                    <option value="11" {% if month == 11 %}selected{% endif %}>November</option>
+                    <option value="12" {% if month == 12 %}selected{% endif %}>December</option>
+                </select>
+            </div>
+            <div class="aws-form-group">
+                <label for="year" class="aws-form-label" style="color: rgba(255,255,255,0.9);">Year</label>
+                <select name="year" id="year" class="aws-form-select">
+                    <option value="2023" {% if year == 2023 %}selected{% endif %}>2023</option>
+                    <option value="2024" {% if year == 2024 %}selected{% endif %}>2024</option>
+                    <option value="2025" {% if year == 2025 %}selected{% endif %}>2025</option>
+                    <option value="2026" {% if year == 2026 %}selected{% endif %}>2026</option>
+                    <option value="2027" {% if year == 2027 %}selected{% endif %}>2027</option>
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button type="submit" class="aws-btn aws-btn-primary w-full">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-lg mb-2xl">
+        <div class="aws-stat-card hover-lift">
+            <div class="aws-stat-icon">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+            </div>
+            <p class="aws-stat-value">{{ scores_data.total_awarded_points|floatformat:2 }}</p>
+            <p class="aws-stat-label">Department Total Points</p>
+            <p class="text-sm mt-sm" style="color: var(--text-secondary);">Combined team performance</p>
+        </div>
+        <div class="aws-stat-card hover-lift">
+            <div class="aws-stat-icon" style="background: linear-gradient(135deg, var(--aws-blue), var(--aws-light-blue));">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <p class="aws-stat-value">{{ status_counts.APPROVED|default:0 }}</p>
+            <p class="aws-stat-label">Approved Submissions</p>
+            <p class="text-sm mt-sm" style="color: var(--text-secondary);">Department-wide</p>
+        </div>
+        <div class="aws-stat-card hover-lift">
+            <div class="aws-stat-icon" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <p class="aws-stat-value">{{ status_counts.SUBMITTED|default:0 }}</p>
+            <p class="aws-stat-label">Pending Approval</p>
+            <p class="text-sm mt-sm" style="color: var(--text-secondary);">Requires review</p>
+        </div>
+        <div class="aws-stat-card hover-lift">
+            <div class="aws-stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            </div>
+            <p class="aws-stat-value">{{ scores_data.team_average|floatformat:2|default:"0.00" }}</p>
+            <p class="aws-stat-label">Team Average</p>
+            <p class="text-sm mt-sm" style="color: var(--text-secondary);">Points per faculty</p>
+        </div>
+    </div>
+
+    <!-- Department Performance Chart -->
+    <div class="aws-chart-container mb-2xl hover-lift">
+        <div class="aws-section-header">
+            <h2 class="aws-section-title">Department Performance by KPI Parameter</h2>
+            <p class="aws-section-subtitle">Points distribution across main parameters for your department</p>
+        </div>
+        <div style="height: 400px;">
+            <canvas id="deptParamChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Quick Management Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-lg mb-2xl">
+        <!-- Management Actions Card -->
+        <div class="aws-card hover-lift">
+            <div class="flex items-center mb-lg">
+                <div class="h-8 w-1 mr-3" style="background: var(--aws-orange);"></div>
+                <h2 class="text-2xl font-bold" style="color: var(--text-primary);">Management Actions</h2>
+            </div>
+            <div class="space-y-md">
+                <a href="/reviews/pending/" class="flex items-center p-lg rounded-lg transition-all hover:bg-gray-50 border border-gray-200 hover:border-orange-500 group">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center mr-lg" style="background: linear-gradient(135deg, var(--aws-orange), var(--aws-orange-hover));">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg group-hover:text-orange-600 transition-colors">Review Submissions</h3>
+                        <p class="text-sm text-gray-600">{{ status_counts.SUBMITTED|default:0 }} pending review</p>
+                    </div>
+                </a>
+                <a href="/kpi/submissions/?department=my" class="flex items-center p-lg rounded-lg transition-all hover:bg-gray-50 border border-gray-200 hover:border-blue-500 group">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center mr-lg" style="background: linear-gradient(135deg, var(--aws-blue), var(--aws-light-blue));">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg group-hover:text-blue-600 transition-colors">View All Submissions</h3>
+                        <p class="text-sm text-gray-600">Department submission history</p>
+                    </div>
+                </a>
+                <a href="/reports/department/" class="flex items-center p-lg rounded-lg transition-all hover:bg-gray-50 border border-gray-200 hover:border-purple-500 group">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center mr-lg" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg group-hover:text-purple-600 transition-colors">Department Reports</h3>
+                        <p class="text-sm text-gray-600">Generate performance reports</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Department Insights Card -->
+        <div class="aws-card hover-lift">
+            <div class="flex items-center mb-lg">
+                <div class="h-8 w-1 mr-3" style="background: var(--aws-blue);"></div>
+                <h2 class="text-2xl font-bold" style="color: var(--text-primary);">Department Insights</h2>
+            </div>
+            <div class="space-y-lg">
+                <!-- Submission Status Breakdown -->
+                <div>
+                    <h3 class="text-sm font-semibold mb-md" style="color: var(--text-secondary);">Submission Status Distribution</h3>
+                    <div class="space-y-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium">Approved</span>
+                            <span class="aws-badge aws-badge-success font-bold">{{ status_counts.APPROVED|default:0 }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium">Pending</span>
+                            <span class="aws-badge aws-badge-warning font-bold">{{ status_counts.SUBMITTED|default:0 }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium">Rejected</span>
+                            <span class="aws-badge aws-badge-danger font-bold">{{ status_counts.REJECTED|default:0 }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Metrics -->
+                <div class="pt-lg border-t border-gray-200">
+                    <h3 class="text-sm font-semibold mb-md" style="color: var(--text-secondary);">Key Metrics</h3>
+                    <div class="grid grid-cols-2 gap-md">
+                        <div class="text-center p-md rounded-lg" style="background: var(--bg-tertiary);">
+                            <p class="text-2xl font-bold" style="color: var(--aws-orange);">
+                                {{ scores_data.total_awarded_points|floatformat:0 }}
+                            </p>
+                            <p class="text-xs font-medium mt-xs" style="color: var(--text-secondary);">Total Points</p>
+                        </div>
+                        <div class="text-center p-md rounded-lg" style="background: var(--bg-tertiary);">
+                            <p class="text-2xl font-bold" style="color: var(--aws-blue);">
+                                {{ scores_data.team_average|floatformat:1|default:"0.0" }}
+                            </p>
+                            <p class="text-xs font-medium mt-xs" style="color: var(--text-secondary);">Avg per Faculty</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alert Box -->
+                {% if status_counts.SUBMITTED > 0 %}
+                <div class="p-lg rounded-lg" style="background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 4px solid #f59e0b;">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 mr-sm flex-shrink-0" style="color: #f59e0b;" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        <div>
+                            <p class="text-sm font-semibold" style="color: var(--text-primary);">Action Required</p>
+                            <p class="text-xs mt-xs" style="color: var(--text-secondary);">
+                                You have {{ status_counts.SUBMITTED }} submission{{ status_counts.SUBMITTED|pluralize }} waiting for your review.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Parameter Breakdown Table -->
+    <div class="aws-table-container mb-2xl hover-lift">
+        <div class="p-xl">
+            <h2 class="text-2xl font-bold mb-md" style="color: var(--text-primary);">Parameter Breakdown</h2>
+            <p class="text-sm mb-lg" style="color: var(--text-secondary);">Detailed view of department performance across all KPI parameters</p>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="aws-table aws-table-striped">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Total Points</th>
+                        <th>Contribution</th>
+                        <th>Distribution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in param_breakdown %}
+                    <tr>
+                        <td>
+                            <span class="font-semibold" style="color: var(--text-primary);">{{ item.main_parameter.name }}</span>
+                        </td>
+                        <td>
+                            <span class="font-bold text-lg" style="color: var(--aws-orange);">{{ item.total_points|floatformat:2 }}</span>
+                        </td>
+                        <td>
+                            {% if scores_data.total_awarded_points > 0 %}
+                                {% widthratio item.total_points scores_data.total_awarded_points 100 as percentage %}
+                                <span class="aws-badge aws-badge-primary font-bold">{{ percentage }}%</span>
+                            {% else %}
+                                <span class="aws-badge aws-badge-secondary font-bold">0%</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if scores_data.total_awarded_points > 0 %}
+                                {% widthratio item.total_points scores_data.total_awarded_points 100 as percentage %}
+                                <div class="flex items-center gap-md">
+                                    <div class="flex-1">
+                                        <div class="aws-progress">
+                                            <div class="aws-progress-bar aws-progress-bar-gradient" style="width: {{ percentage }}%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="flex items-center gap-md">
+                                    <div class="flex-1">
+                                        <div class="aws-progress">
+                                            <div class="aws-progress-bar aws-progress-bar-secondary" style="width: 0%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-xl">
+                            <div class="flex flex-col items-center gap-md">
+                                <svg class="w-16 h-16" style="color: var(--text-tertiary);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                                <p class="font-medium" style="color: var(--text-secondary);">No parameter data available for this period</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- Charts JavaScript with AWS Colors -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // AWS Color Palette
+    const awsColors = {
+        orange: '#ff9900',
+        orangeHover: '#ec7211',
+        dark: '#232f3e',
+        blue: '#0073bb',
+        lightBlue: '#5bc0de',
+        squidInk: '#16191f',
+        charcoal: '#414750',
+        gray1: '#687078',
+        gray2: '#879196',
+        gray3: '#aab7b8',
+        gray4: '#d5dbdb',
+        gray5: '#eaeded',
+        gray6: '#f2f3f3'
+    };
+    
+    // Department Parameter Chart
+    const ctx = document.getElementById('deptParamChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ param_labels|safe }},
+                datasets: [{
+                    label: 'Department Total Points',
+                    data: {{ param_points|safe }},
+                    backgroundColor: awsColors.orange,
+                    borderColor: awsColors.orangeHover,
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    hoverBackgroundColor: awsColors.orangeHover,
+                    hoverBorderColor: awsColors.dark,
+                    hoverBorderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                weight: '600',
+                                family: 'system-ui'
+                            },
+                            color: awsColors.squidInk,
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'rectRounded'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: awsColors.dark,
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        borderColor: awsColors.orange,
+                        borderWidth: 2,
+                        padding: 12,
+                        cornerRadius: 8,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        }
+                    }
+                },
+                scales: { 
+                    y: { 
+                        beginAtZero: true,
+                        grid: {
+                            color: awsColors.gray5,
+                            lineWidth: 1
+                        },
+                        ticks: {
+                            font: {
+                                size: 12,
+                                weight: '500',
+                                family: 'system-ui'
+                            },
+                            color: awsColors.charcoal
+                        },
+                        title: {
+                            display: true,
+                            text: 'POINTS',
+                            font: {
+                                size: 13,
+                                weight: 'bold',
+                                family: 'system-ui'
+                            },
+                            color: awsColors.squidInk
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 12,
+                                weight: '500',
+                                family: 'system-ui'
+                            },
+                            color: awsColors.charcoal
+                        },
+                        title: {
+                            display: true,
+                            text: 'KPI PARAMETERS',
+                            font: {
+                                size: 13,
+                                weight: 'bold',
+                                family: 'system-ui'
+                            },
+                            color: awsColors.squidInk
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

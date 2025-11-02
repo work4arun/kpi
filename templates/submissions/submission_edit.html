@@ -1,0 +1,131 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Submission{% endblock %}
+
+{% block content %}
+<!-- AWS-Inspired Submission Edit -->
+<div class="animate-fade-in">
+    <!-- Page Header -->
+    <div class="mb-2xl">
+        <h1 class="text-5xl font-bold mb-md" style="color: var(--text-primary); letter-spacing: -0.02em;">
+            Edit Submission
+        </h1>
+        <p class="text-lg" style="color: var(--text-secondary);">
+            {{ submission.sub_parameter.name }} - {{ submission.get_month_display }} {{ submission.year }}
+        </p>
+        <div class="aws-divider"></div>
+    </div>
+
+    <!-- Submission Info -->
+    <div class="aws-card mb-lg" style="background: var(--aws-dark); color: white;">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-lg">
+            <div>
+                <p class="text-sm mb-xs" style="color: rgba(255,255,255,0.7);">Parameter</p>
+                <p class="font-bold">{{ submission.sub_parameter.main_parameter.name }}</p>
+            </div>
+            <div>
+                <p class="text-sm mb-xs" style="color: rgba(255,255,255,0.7);">Sub Parameter</p>
+                <p class="font-bold">{{ submission.sub_parameter.name }}</p>
+            </div>
+            <div>
+                <p class="text-sm mb-xs" style="color: rgba(255,255,255,0.7);">Period</p>
+                <p class="font-bold">{{ submission.get_month_display }} {{ submission.year }}</p>
+            </div>
+            <div>
+                <p class="text-sm mb-xs" style="color: rgba(255,255,255,0.7);">Status</p>
+                <span class="aws-badge aws-badge-{% if submission.status == 'DRAFT' %}secondary{% elif submission.status == 'SUBMITTED' %}warning{% elif submission.status == 'HOD_APPROVED' or submission.status == 'DEAN_APPROVED' %}success{% else %}danger{% endif %}">
+                    {{ submission.get_status_display }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="aws-card mb-2xl hover-lift">
+        <div class="flex items-center mb-lg">
+            <div class="h-8 w-1 mr-3" style="background: var(--aws-orange);"></div>
+            <h2 class="text-2xl font-bold" style="color: var(--text-primary);">Submission Form</h2>
+        </div>
+
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Display form errors -->
+            {% if form.errors %}
+            <div class="mb-lg p-lg rounded-lg" style="background: #fee; border-left: 4px solid #dc2626;">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 mr-sm flex-shrink-0" style="color: #dc2626;" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                    <div>
+                        <p class="text-sm font-semibold" style="color: var(--text-primary);">Please correct the errors below</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Dynamic Form Fields -->
+            {% for field in form %}
+                <div class="aws-form-group mb-lg">
+                    <label for="{{ field.id_for_label }}" class="aws-form-label">
+                        {{ field.label }}
+                        {% if field.field.required %}
+                            <span class="text-red-500">*</span>
+                        {% endif %}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-sm text-red-600 mt-sm">{{ field.errors.0 }}</p>
+                    {% endif %}
+                    {% if field.help_text %}
+                        <p class="text-sm mt-sm" style="color: var(--text-secondary);">{{ field.help_text }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <!-- Existing Attachments -->
+            {% if attachments %}
+            <div class="mb-lg p-lg rounded-lg" style="background: var(--bg-tertiary); border: 1px solid var(--border-color);">
+                <h3 class="text-lg font-bold mb-md" style="color: var(--text-primary);">Attachments</h3>
+                <div class="space-y-sm">
+                    {% for attachment in attachments %}
+                    <div class="flex items-center justify-between p-sm rounded" style="background: var(--bg-primary);">
+                        <div class="flex items-center gap-sm">
+                            <svg class="w-5 h-5" style="color: var(--aws-blue);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-sm">{{ attachment.file_name }}</span>
+                        </div>
+                        <a href="{{ attachment.file.url }}" target="_blank" class="text-sm" style="color: var(--aws-blue);">Download</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="flex gap-md mt-2xl">
+                {% if submission.status == 'DRAFT' or submission.status == 'NEEDS_REVISION' %}
+                <button type="submit" name="submit" class="aws-btn aws-btn-primary">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Submit
+                </button>
+                <button type="submit" name="save_draft" class="aws-btn aws-btn-secondary">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                    </svg>
+                    Save Draft
+                </button>
+                {% endif %}
+                <a href="{% url 'submissions:submission_list' %}" class="aws-btn aws-btn-secondary">
+                    Back to List
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

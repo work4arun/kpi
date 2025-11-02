@@ -1,0 +1,90 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center -mt-8" style="background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);">
+    <div class="max-w-md w-full animate-fade-in-up">
+        <!-- Login Card -->
+        <div class="aws-card" style="box-shadow: var(--shadow-xl);">
+            <!-- Header -->
+            <div class="text-center mb-xl">
+                <h1 class="text-4xl font-bold mb-md" style="color: var(--aws-dark);">
+                    <span style="color: var(--aws-orange);">RTC</span> KPI System
+                </h1>
+                <div class="h-1 w-20 mx-auto mb-md" style="background: var(--aws-orange);"></div>
+                <p class="text-sm font-semibold uppercase tracking-wide" style="color: var(--text-secondary);">
+                    Rathinam Technical Campus
+                </p>
+                <p class="text-xs mt-xs" style="color: var(--text-tertiary);">
+                    KPI Management System
+                </p>
+            </div>
+
+            <!-- Login Form -->
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                <div class="aws-form-group">
+                    <label for="{{ form.email.id_for_label }}" class="aws-form-label">
+                        Email Address
+                    </label>
+                    <input type="email" 
+                           id="{{ form.email.id_for_label }}"
+                           name="{{ form.email.name }}"
+                           value="{{ form.email.value|default:'' }}"
+                           class="aws-form-input"
+                           placeholder="your.email@rtc.edu"
+                           required>
+                    {% if form.email.errors %}
+                    <span class="aws-form-error">{{ form.email.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="aws-form-group">
+                    <label for="{{ form.password.id_for_label }}" class="aws-form-label">
+                        Password
+                    </label>
+                    <input type="password" 
+                           id="{{ form.password.id_for_label }}"
+                           name="{{ form.password.name }}"
+                           class="aws-form-input"
+                           placeholder="Enter your password"
+                           required>
+                    {% if form.password.errors %}
+                    <span class="aws-form-error">{{ form.password.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                {% if form.non_field_errors %}
+                <div class="aws-alert aws-alert-error">
+                    {{ form.non_field_errors.0 }}
+                </div>
+                {% endif %}
+
+                <button type="submit" class="aws-btn aws-btn-primary w-full">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                    </svg>
+                    Sign In to Dashboard
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="mt-xl pt-lg text-center" style="border-top: 1px solid var(--border-light);">
+                <p class="text-xs" style="color: var(--text-tertiary);">
+                    © 2025 Rathinam Technical Campus. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <!-- Help Text -->
+        <div class="mt-lg text-center">
+            <p class="text-sm" style="color: var(--text-secondary);">
+                Need help accessing your account? Contact your administrator.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

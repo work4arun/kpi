@@ -1,0 +1,140 @@
+rtc_kpi_system/
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── Dockerfile
+├── Makefile
+├── requirements.txt
+├── README.md
+├── manage.py
+├── rtc_kpi/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+├── apps/
+│   ├── __init__.py
+│   ├── accounts/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   ├── forms.py
+│   │   ├── decorators.py
+│   │   ├── signals.py
+│   │   └── migrations/
+│   ├── departments/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   └── migrations/
+│   ├── kpi/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   ├── services.py
+│   │   └── migrations/
+│   ├── submissions/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   ├── forms.py
+│   │   ├── services.py
+│   │   └── migrations/
+│   ├── reviews/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   ├── forms.py
+│   │   ├── services.py
+│   │   └── migrations/
+│   ├── dashboards/
+│   │   ├── __init__.py
+│   │   ├── apps.py
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   ├── services.py
+│   │   └── migrations/
+│   ├── notifications/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   ├── services.py
+│   │   ├── signals.py
+│   │   └── migrations/
+│   ├── forms_builder/
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── models.py
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   ├── renderers.py
+│   │   ├── validators.py
+│   │   └── migrations/
+│   └── common/
+│       ├── __init__.py
+│       ├── apps.py
+│       ├── models.py
+│       ├── decorators.py
+│       ├── constants.py
+│       ├── utils.py
+│       └── migrations/
+├── templates/
+│   ├── base.html
+│   ├── home.html
+│   ├── accounts/
+│   │   ├── login.html
+│   │   ├── profile.html
+│   │   └── user_list.html
+│   ├── dashboards/
+│   │   ├── admin_dashboard.html
+│   │   ├── faculty_dashboard.html
+│   │   ├── hod_dashboard.html
+│   │   └── dean_dashboard.html
+│   ├── submissions/
+│   │   ├── submission_form.html
+│   │   ├── submission_list.html
+│   │   └── submission_detail.html
+│   ├── reviews/
+│   │   ├── review_list.html
+│   │   └── review_form.html
+│   └── partials/
+│       ├── navbar.html
+│       ├── messages.html
+│       └── pagination.html
+├── static/
+│   ├── css/
+│   │   └── custom.css
+│   └── js/
+│       └── main.js
+├── media/
+│   └── attachments/
+├── scripts/
+│   ├── seed_data.py
+│   └── create_groups.py
+└── tests/
+    ├── __init__.py
+    ├── test_models.py
+    ├── test_views.py
+    ├── test_services.py
+    └── fixtures/
+        └── sample_data.json

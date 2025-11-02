@@ -1,0 +1,4 @@
+
+"""
+Departments app - Department management
+"""

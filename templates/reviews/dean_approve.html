@@ -1,0 +1,33 @@
+
+{% extends 'base.html' %}
+{% block title %}Dean Approval{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Dean Final Approval</h1>
+<div class="bg-white shadow rounded-lg p-6 mb-6">
+    <h2 class="text-xl mb-2">{{ faculty.full_name }}</h2>
+    <p>Department: {{ faculty.department.name }}</p>
+    <p>Period: {{ month }}/{{ year }}</p>
+    <p class="text-2xl font-bold mt-4">Total Points: {{ total_points|floatformat:2 }}</p>
+</div>
+<div class="bg-white shadow rounded-lg p-6">
+    <h3 class="font-semibold mb-4">Submissions to Approve:</h3>
+    <ul class="list-disc list-inside mb-6">
+        {% for sub in submissions %}
+        <li>{{ sub.sub_parameter.name }} - {{ sub.awarded_points }} points</li>
+        {% endfor %}
+    </ul>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-4">
+            <label class="block text-sm font-medium mb-1">{{ field.label }}</label>
+            {{ field }}
+        </div>
+        {% endfor %}
+        <div class="flex space-x-4">
+            <button type="submit" class="btn-primary">Give Final Approval</button>
+            <a href="{% url 'reviews:dean_review_list' %}" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<!-- Authenticated Home -->
+<div class="space-y-8">
+    <!-- Welcome Section -->
+    <div class="card-brutal text-center">
+        <h1 class="text-5xl font-black text-black mb-4">
+            Welcome Back, {{ user.full_name }}!
+        </h1>
+        <div class="h-2 w-32 bg-black mx-auto mb-6"></div>
+        <p class="text-xl text-medium-gray font-semibold mb-2">
+            You're logged in as <span class="text-black">{{ user.get_role_display }}</span>
+        </p>
+        <p class="text-sm text-light-gray">
+            Rathinam Technical Campus - KPI Management System
+        </p>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a href="{% url 'dashboards:dashboard' %}" class="card hover-lift group">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-black rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                </div>
+                <div class="flex-1 text-left">
+                    <h3 class="text-lg font-black text-black">Dashboard</h3>
+                    <p class="text-sm text-medium-gray">View your analytics</p>
+                </div>
+                <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </div>
+        </a>
+
+        {% if user.role == 'FACULTY' or user.role == 'HOD' %}
+        <a href="{% url 'submissions:submission_create' %}" class="card hover-lift group">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-black rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </div>
+                <div class="flex-1 text-left">
+                    <h3 class="text-lg font-black text-black">New Submission</h3>
+                    <p class="text-sm text-medium-gray">Create KPI submission</p>
+                </div>
+                <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </div>
+        </a>
+        {% endif %}
+
+        <a href="{% url 'accounts:profile' %}" class="card hover-lift group">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-black rounded-lg flex items-center justify-center group-hover:scale-110 transition">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                </div>
+                <div class="flex-1 text-left">
+                    <h3 class="text-lg font-black text-black">My Profile</h3>
+                    <p class="text-sm text-medium-gray">Manage your account</p>
+                </div>
+                <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </div>
+        </a>
+    </div>
+
+    <!-- System Info -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="stat-card">
+            <div class="stat-card-value">KPI</div>
+            <div class="stat-card-label">Management</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-value">RTC</div>
+            <div class="stat-card-label">Campus System</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-value">2025</div>
+            <div class="stat-card-label">Academic Year</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-value">V2.0</div>
+            <div class="stat-card-label">System Version</div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- Guest Home -->
+<div class="flex items-center justify-center min-h-[70vh]">
+    <div class="card-brutal max-w-2xl text-center">
+        <h1 class="text-6xl font-black text-black mb-4">RTC KPI</h1>
+        <div class="h-2 w-32 bg-black mx-auto mb-6"></div>
+        <p class="text-2xl text-medium-gray font-semibold mb-8">
+            Rathinam Technical Campus
+        </p>
+        <p class="text-lg text-dark-gray mb-12">
+            Key Performance Indicator Management System
+        </p>
+        
+        <a href="{% url 'accounts:login' %}" class="btn-primary btn-lg">
+            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+            </svg>
+            Login to Continue
+        </a>
+
+        <div class="mt-12 pt-8 border-t-2 border-pale-gray">
+            <p class="text-sm text-light-gray">
+                Streamlined KPI tracking and performance management for academic excellence
+            </p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

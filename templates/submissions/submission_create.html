@@ -1,0 +1,96 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}New Submission{% endblock %}
+
+{% block content %}
+<!-- AWS-Inspired Submission Create -->
+<div class="animate-fade-in">
+    <!-- Page Header -->
+    <div class="mb-2xl">
+        <h1 class="text-5xl font-bold mb-md" style="color: var(--text-primary); letter-spacing: -0.02em;">
+            New Submission
+        </h1>
+        <p class="text-lg" style="color: var(--text-secondary);">
+            Select a KPI parameter to submit
+        </p>
+        <div class="aws-divider"></div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="aws-card mb-2xl hover-lift" style="max-width: 800px;">
+        <div class="flex items-center mb-lg">
+            <div class="h-8 w-1 mr-3" style="background: var(--aws-orange);"></div>
+            <h2 class="text-2xl font-bold" style="color: var(--text-primary);">Submission Details</h2>
+        </div>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            
+            <!-- Display form errors -->
+            {% if form.errors %}
+            <div class="mb-lg p-lg rounded-lg" style="background: #fee; border-left: 4px solid #dc2626;">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 mr-sm flex-shrink-0" style="color: #dc2626;" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                    <div>
+                        <p class="text-sm font-semibold" style="color: var(--text-primary);">Please correct the errors below</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Sub Parameter -->
+            <div class="aws-form-group mb-lg">
+                <label for="{{ form.sub_parameter.id_for_label }}" class="aws-form-label">
+                    Sub Parameter <span class="text-red-500">*</span>
+                </label>
+                {{ form.sub_parameter }}
+                {% if form.sub_parameter.errors %}
+                    <p class="text-sm text-red-600 mt-sm">{{ form.sub_parameter.errors.0 }}</p>
+                {% endif %}
+                <p class="text-sm mt-sm" style="color: var(--text-secondary);">
+                    Select the KPI parameter you want to submit for
+                </p>
+            </div>
+
+            <!-- Month -->
+            <div class="aws-form-group mb-lg">
+                <label for="{{ form.month.id_for_label }}" class="aws-form-label">
+                    Month <span class="text-red-500">*</span>
+                </label>
+                {{ form.month }}
+                {% if form.month.errors %}
+                    <p class="text-sm text-red-600 mt-sm">{{ form.month.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Year -->
+            <div class="aws-form-group mb-lg">
+                <label for="{{ form.year.id_for_label }}" class="aws-form-label">
+                    Year <span class="text-red-500">*</span>
+                </label>
+                {{ form.year }}
+                {% if form.year.errors %}
+                    <p class="text-sm text-red-600 mt-sm">{{ form.year.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-md mt-2xl">
+                <button type="submit" class="aws-btn aws-btn-primary">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                    Continue
+                </button>
+                <a href="{% url 'submissions:submission_list' %}" class="aws-btn aws-btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

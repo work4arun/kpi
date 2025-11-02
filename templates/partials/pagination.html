@@ -1,0 +1,74 @@
+{% if is_paginated %}
+<div class="flex items-center justify-between bg-white border-2 border-black rounded-lg px-6 py-4 mt-8 shadow-md">
+    <!-- Mobile Pagination -->
+    <div class="flex flex-1 justify-between sm:hidden">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn-secondary btn-sm">
+            Previous
+        </a>
+        {% else %}
+        <span class="btn-secondary btn-sm opacity-50 cursor-not-allowed">Previous</span>
+        {% endif %}
+        
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn-secondary btn-sm">
+            Next
+        </a>
+        {% else %}
+        <span class="btn-secondary btn-sm opacity-50 cursor-not-allowed">Next</span>
+        {% endif %}
+    </div>
+    
+    <!-- Desktop Pagination -->
+    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <div>
+            <p class="text-sm font-semibold text-black">
+                Showing
+                <span class="font-black">{{ page_obj.start_index }}</span>
+                to
+                <span class="font-black">{{ page_obj.end_index }}</span>
+                of
+                <span class="font-black">{{ page_obj.paginator.count }}</span>
+                results
+            </p>
+        </div>
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="pagination-item">
+                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+                </svg>
+            </a>
+            {% else %}
+            <span class="pagination-item disabled">
+                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+                </svg>
+            </span>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <span class="pagination-item active">{{ num }}</span>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}" class="pagination-item">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="pagination-item">
+                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                </svg>
+            </a>
+            {% else %}
+            <span class="pagination-item disabled">
+                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                </svg>
+            </span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}RTC KPI System{% endblock %} - Rathinam Technical Campus</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- AWS Theme CSS -->
+    <link rel="stylesheet" href="/static/css/aws_theme.css">
+    
+    <!-- Custom CSS (Fallback) -->
+    <link rel="stylesheet" href="/static/css/custom.css">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <style>
+        /* AWS Theme Customization */
+        body {
+            background: var(--bg-secondary);
+        }
+    </style>
+</head>
+<body class="h-full">
+    <div class="min-h-full flex flex-col">
+        <!-- Navigation -->
+        {% include 'partials/navbar.html' %}
+        
+        <!-- Page Header -->
+        {% block page_header %}{% endblock %}
+        
+        <!-- Main Content -->
+        <main class="flex-1 py-8 animate-fade-in">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Messages -->
+                {% include 'partials/messages.html' %}
+                
+                <!-- Breadcrumbs -->
+                {% block breadcrumbs %}{% endblock %}
+                
+                <!-- Content -->
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="mt-auto" style="background: var(--aws-dark); border-top: 1px solid var(--aws-dark-hover);">
+            <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p class="text-center md:text-left text-sm font-semibold" style="color: var(--text-white);">
+                        &copy; 2025 <span style="color: var(--aws-orange);">Rathinam Technical Campus</span>. All rights reserved.
+                    </p>
+                    <p class="text-center md:text-right text-xs" style="color: rgba(255,255,255,0.6);">
+                        KPI Management System v2.0 | Powered by AWS-inspired Design
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Custom JavaScript -->
+    <script src="/static/js/main.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

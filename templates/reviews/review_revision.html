@@ -1,0 +1,24 @@
+
+{% extends 'base.html' %}
+{% block title %}Request Revision{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Request Revision</h1>
+<div class="bg-white shadow rounded-lg p-6">
+    <h2 class="text-xl mb-4">{{ submission.sub_parameter.name }}</h2>
+    <p class="mb-4">Faculty: {{ submission.user.full_name }}</p>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-4">
+            <label class="block text-sm font-medium mb-1">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<p class="text-red-600 text-sm">{{ field.errors.0 }}</p>{% endif %}
+        </div>
+        {% endfor %}
+        <div class="flex space-x-4">
+            <button type="submit" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700">Request Revision</button>
+            <a href="{% url 'reviews:review_list' %}" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

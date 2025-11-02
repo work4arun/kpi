@@ -1,0 +1,624 @@
+
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<!-- Custom Styles for Black & White Theme -->
+<style>
+    /* Modern Black & White Design System */
+    .bw-card {
+        background: linear-gradient(145deg, #ffffff, #f5f5f5);
+        border: 2px solid #e0e0e0;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .bw-card:hover {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
+        transform: translateY(-2px);
+    }
+    
+    .bw-stat-card {
+        background: #ffffff;
+        border: 3px solid #000000;
+        box-shadow: 8px 8px 0 #000000;
+        transition: all 0.3s ease;
+    }
+    
+    .bw-stat-card:hover {
+        box-shadow: 12px 12px 0 #000000;
+        transform: translate(-2px, -2px);
+    }
+    
+    .bw-filter-card {
+        background: #000000;
+        color: #ffffff;
+        border: 3px solid #000000;
+    }
+    
+    .bw-select {
+        background: #ffffff;
+        color: #000000;
+        border: 2px solid #404040;
+        transition: all 0.3s ease;
+    }
+    
+    .bw-select:hover {
+        border-color: #000000;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .bw-select:focus {
+        outline: none;
+        border-color: #000000;
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);
+    }
+    
+    .bw-btn {
+        background: #000000;
+        color: #ffffff;
+        border: 3px solid #000000;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .bw-btn:hover {
+        background: #ffffff;
+        color: #000000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    .bw-table-header {
+        background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+        color: #ffffff;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+    }
+    
+    .bw-table-row:hover {
+        background: linear-gradient(90deg, #f5f5f5 0%, #ffffff 100%);
+    }
+    
+    .bw-rank-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-weight: 900;
+        font-size: 1rem;
+        border: 3px solid #000000;
+    }
+    
+    .bw-rank-1 {
+        background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .bw-rank-2 {
+        background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    }
+    
+    .bw-rank-3 {
+        background: linear-gradient(135deg, #d0d0d0 0%, #e8e8e8 100%);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .bw-divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent 0%, #000000 50%, transparent 100%);
+        margin: 2rem 0;
+    }
+    
+    .bw-progress-bar {
+        background: linear-gradient(90deg, #e0e0e0 0%, #f5f5f5 50%, #e0e0e0 100%);
+        border: 1px solid #d0d0d0;
+    }
+    
+    .bw-progress-fill {
+        background: linear-gradient(90deg, #000000 0%, #2d2d2d 50%, #000000 100%);
+        box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    }
+    
+    .bw-section-title {
+        font-size: 1.75rem;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        color: #000000;
+        text-transform: uppercase;
+        position: relative;
+        padding-bottom: 0.75rem;
+    }
+    
+    .bw-section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: #000000;
+    }
+    
+    .bw-metric-value {
+        font-size: 3rem;
+        font-weight: 900;
+        color: #000000;
+        line-height: 1;
+        letter-spacing: -0.03em;
+    }
+    
+    .bw-metric-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #666666;
+    }
+    
+    .bw-chart-container {
+        background: #ffffff;
+        border: 2px solid #e0e0e0;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+    }
+    
+    /* Striped table effect */
+    .bw-table-striped tbody tr:nth-child(even) {
+        background: #fafafa;
+    }
+    
+    /* Premium shadow effect */
+    .bw-shadow-lg {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.06);
+    }
+</style>
+
+<!-- Main Dashboard Container -->
+<div class="max-w-7xl mx-auto px-4 py-8">
+    
+    <!-- Page Title -->
+    <div class="mb-10">
+        <h1 class="text-5xl font-black text-black tracking-tight mb-3" style="letter-spacing: -0.03em;">
+            ADMINISTRATOR DASHBOARD
+        </h1>
+        <div class="h-1 w-32 bg-black"></div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="bw-filter-card rounded-xl p-8 mb-10 bw-shadow-lg">
+        <div class="flex items-center mb-6">
+            <div class="h-8 w-1 bg-white mr-3"></div>
+            <h2 class="text-2xl font-black text-white tracking-wide">FILTERS</h2>
+        </div>
+        <form method="GET" action="" class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+                <label for="month" class="block text-xs font-bold text-gray-300 mb-2 tracking-wider uppercase">Month</label>
+                <select name="month" id="month" class="bw-select w-full px-4 py-3 rounded-lg font-semibold">
+                    <option value="1" {% if month == 1 %}selected{% endif %}>January</option>
+                    <option value="2" {% if month == 2 %}selected{% endif %}>February</option>
+                    <option value="3" {% if month == 3 %}selected{% endif %}>March</option>
+                    <option value="4" {% if month == 4 %}selected{% endif %}>April</option>
+                    <option value="5" {% if month == 5 %}selected{% endif %}>May</option>
+                    <option value="6" {% if month == 6 %}selected{% endif %}>June</option>
+                    <option value="7" {% if month == 7 %}selected{% endif %}>July</option>
+                    <option value="8" {% if month == 8 %}selected{% endif %}>August</option>
+                    <option value="9" {% if month == 9 %}selected{% endif %}>September</option>
+                    <option value="10" {% if month == 10 %}selected{% endif %}>October</option>
+                    <option value="11" {% if month == 11 %}selected{% endif %}>November</option>
+                    <option value="12" {% if month == 12 %}selected{% endif %}>December</option>
+                </select>
+            </div>
+            <div>
+                <label for="year" class="block text-xs font-bold text-gray-300 mb-2 tracking-wider uppercase">Year</label>
+                <select name="year" id="year" class="bw-select w-full px-4 py-3 rounded-lg font-semibold">
+                    <option value="2023" {% if year == 2023 %}selected{% endif %}>2023</option>
+                    <option value="2024" {% if year == 2024 %}selected{% endif %}>2024</option>
+                    <option value="2025" {% if year == 2025 %}selected{% endif %}>2025</option>
+                    <option value="2026" {% if year == 2026 %}selected{% endif %}>2026</option>
+                    <option value="2027" {% if year == 2027 %}selected{% endif %}>2027</option>
+                </select>
+            </div>
+            <div>
+                <label for="department" class="block text-xs font-bold text-gray-300 mb-2 tracking-wider uppercase">Department</label>
+                <select name="department" id="department" class="bw-select w-full px-4 py-3 rounded-lg font-semibold">
+                    <option value="">All Departments</option>
+                    {% for dept in dept_comparison %}
+                    <option value="{{ dept.department.id }}" {% if department_filter|stringformat:"s" == dept.department.id|stringformat:"s" %}selected{% endif %}>
+                        {{ dept.department.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button type="submit" class="bw-btn w-full px-6 py-3 rounded-lg uppercase text-sm">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div class="bw-stat-card rounded-lg p-8">
+            <p class="bw-metric-label mb-3">Total Departments</p>
+            <p class="bw-metric-value mb-2">{{ dept_comparison|length }}</p>
+            <p class="text-sm text-gray-600 font-semibold">Active departments</p>
+        </div>
+        <div class="bw-stat-card rounded-lg p-8">
+            <p class="bw-metric-label mb-3">Faculty Count</p>
+            <p class="bw-metric-value mb-2">{{ leaderboard|length }}</p>
+            <p class="text-sm text-gray-600 font-semibold">Active faculty members</p>
+        </div>
+        <div class="bw-stat-card rounded-lg p-8">
+            <p class="bw-metric-label mb-3">Total KPI Points</p>
+            <p class="bw-metric-value mb-2">
+                {% widthratio dept_comparison|length 1 1 as total_count %}
+                {% if dept_comparison %}
+                    {{ dept_points|slice:"1:-1"|cut:" "|cut:","| first|default:"0" }}
+                {% else %}
+                    0.00
+                {% endif %}
+            </p>
+            <p class="text-sm text-gray-600 font-semibold">Across all departments</p>
+        </div>
+    </div>
+
+    <!-- Department Comparison Chart -->
+    <div class="bw-card rounded-xl p-8 mb-10">
+        <h2 class="bw-section-title mb-6">Department Performance</h2>
+        <div class="mb-6">
+            <p class="text-sm text-gray-600 font-medium">Comparison of total KPI points across all departments for the selected period</p>
+        </div>
+        <div class="bw-chart-container" style="height: 450px;">
+            <canvas id="deptComparisonChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Main Parameter Breakdown Chart -->
+    <div class="bw-card rounded-xl p-8 mb-10">
+        <h2 class="bw-section-title mb-6">Main Parameter Breakdown</h2>
+        <div class="mb-6">
+            <p class="text-sm text-gray-600 font-medium">Distribution of points across main KPI parameters</p>
+        </div>
+        <div class="bw-chart-container" style="height: 450px;">
+            <canvas id="paramBreakdownChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Department Comparison Table -->
+    <div class="bw-card rounded-xl p-8 mb-10">
+        <h2 class="bw-section-title mb-6">Department Details</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bw-table-striped">
+                <thead>
+                    <tr class="bw-table-header">
+                        <th scope="col" class="px-8 py-4 text-left">Rank</th>
+                        <th scope="col" class="px-8 py-4 text-left">Department</th>
+                        <th scope="col" class="px-8 py-4 text-left">Total Points</th>
+                        <th scope="col" class="px-8 py-4 text-left">Avg per Faculty</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    {% for item in dept_comparison %}
+                    <tr class="bw-table-row border-b-2 border-gray-100">
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            <span class="font-black text-lg text-black">{{ forloop.counter }}</span>
+                        </td>
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            <span class="font-bold text-black text-base">{{ item.department.name }}</span>
+                        </td>
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            <span class="font-semibold text-black">{{ item.total_points|floatformat:2 }}</span>
+                        </td>
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            <span class="font-semibold text-gray-700">{{ item.avg_per_faculty|floatformat:2 }}</span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="px-8 py-8 text-center text-sm text-gray-500 font-medium">No department data available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Faculty Leaderboard -->
+    <div class="bw-card rounded-xl p-8 mb-10">
+        <h2 class="bw-section-title mb-6">Faculty Leaderboard</h2>
+        <div class="mb-6">
+            <p class="text-sm text-gray-600 font-medium">Top 20 highest performing faculty members based on KPI points</p>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bw-table-striped">
+                <thead>
+                    <tr class="bw-table-header">
+                        <th scope="col" class="px-8 py-4 text-left">Rank</th>
+                        <th scope="col" class="px-8 py-4 text-left">Faculty Name</th>
+                        <th scope="col" class="px-8 py-4 text-left">Department</th>
+                        <th scope="col" class="px-8 py-4 text-left">Total Points</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    {% for item in leaderboard %}
+                    <tr class="bw-table-row border-b-2 border-gray-100 {% if forloop.counter <= 3 %}bg-gradient-to-r from-gray-50 to-white{% endif %}">
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            {% if forloop.counter == 1 %}
+                                <div class="flex items-center">
+                                    <span class="bw-rank-badge bw-rank-1">1</span>
+                                </div>
+                            {% elif forloop.counter == 2 %}
+                                <div class="flex items-center">
+                                    <span class="bw-rank-badge bw-rank-2">2</span>
+                                </div>
+                            {% elif forloop.counter == 3 %}
+                                <div class="flex items-center">
+                                    <span class="bw-rank-badge bw-rank-3">3</span>
+                                </div>
+                            {% else %}
+                                <span class="font-black text-lg text-black">{{ forloop.counter }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            <span class="font-bold text-black text-base">{{ item.user__full_name }}</span>
+                        </td>
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            <span class="text-gray-700 font-semibold">{{ item.user__department__name }}</span>
+                        </td>
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            <span class="font-black text-black text-lg">{{ item.total_points|floatformat:2 }}</span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="px-8 py-8 text-center text-sm text-gray-500 font-medium">No faculty data available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Parameter Breakdown Table -->
+    <div class="bw-card rounded-xl p-8 mb-10">
+        <h2 class="bw-section-title mb-6">Parameter Details</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bw-table-striped">
+                <thead>
+                    <tr class="bw-table-header">
+                        <th scope="col" class="px-8 py-4 text-left">Main Parameter</th>
+                        <th scope="col" class="px-8 py-4 text-left">Total Points</th>
+                        <th scope="col" class="px-8 py-4 text-left">Distribution</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    {% for item in param_breakdown %}
+                    <tr class="bw-table-row border-b-2 border-gray-100">
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            <span class="font-bold text-black text-base">{{ item.main_parameter.name }}</span>
+                        </td>
+                        <td class="px-8 py-5 whitespace-nowrap">
+                            <span class="font-semibold text-black">{{ item.total_points|floatformat:2 }}</span>
+                        </td>
+                        <td class="px-8 py-5">
+                            {% widthratio item.total_points 1 100 as percentage %}
+                            <div class="flex items-center">
+                                <div class="w-full bw-progress-bar rounded-full h-3 mr-3">
+                                    <div class="bw-progress-fill h-3 rounded-full transition-all duration-500" style="width: {{ percentage }}%"></div>
+                                </div>
+                                <span class="text-sm font-black text-black min-w-[50px]">{{ percentage }}%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="px-8 py-8 text-center text-sm text-gray-500 font-medium">No parameter data available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- Charts JavaScript with Grayscale Colors Only -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Grayscale color palette
+    const grayscalePalette = [
+        '#000000', // Black
+        '#1a1a1a', // Very Dark Gray
+        '#333333', // Dark Gray
+        '#4d4d4d', // Medium-Dark Gray
+        '#666666', // Medium Gray
+        '#808080', // Gray
+        '#999999', // Medium-Light Gray
+        '#b3b3b3', // Light Gray
+        '#cccccc', // Very Light Gray
+        '#e6e6e6', // Almost White
+    ];
+
+    // Department Comparison Chart
+    const deptCtx = document.getElementById('deptComparisonChart');
+    if (deptCtx) {
+        new Chart(deptCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ dept_labels|safe }},
+                datasets: [{
+                    label: 'Total KPI Points',
+                    data: {{ dept_points|safe }},
+                    backgroundColor: '#000000',
+                    borderColor: '#000000',
+                    borderWidth: 2,
+                    hoverBackgroundColor: '#333333',
+                    hoverBorderColor: '#000000',
+                    hoverBorderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                weight: 'bold',
+                                family: 'system-ui'
+                            },
+                            color: '#000000',
+                            padding: 15
+                        }
+                    },
+                    title: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#000000',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        borderColor: '#000000',
+                        borderWidth: 2,
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13,
+                            weight: 'normal'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#e0e0e0',
+                            lineWidth: 1
+                        },
+                        ticks: {
+                            font: {
+                                size: 12,
+                                weight: '600',
+                                family: 'system-ui'
+                            },
+                            color: '#000000'
+                        },
+                        title: {
+                            display: true,
+                            text: 'POINTS',
+                            font: {
+                                size: 13,
+                                weight: 'bold',
+                                family: 'system-ui'
+                            },
+                            color: '#000000'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 12,
+                                weight: '600',
+                                family: 'system-ui'
+                            },
+                            color: '#000000'
+                        },
+                        title: {
+                            display: true,
+                            text: 'DEPARTMENTS',
+                            font: {
+                                size: 13,
+                                weight: 'bold',
+                                family: 'system-ui'
+                            },
+                            color: '#000000'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Parameter Breakdown Chart - Grayscale Doughnut
+    const paramCtx = document.getElementById('paramBreakdownChart');
+    if (paramCtx) {
+        new Chart(paramCtx, {
+            type: 'doughnut',
+            data: {
+                labels: {{ param_labels|safe }},
+                datasets: [{
+                    label: 'Points by Parameter',
+                    data: {{ param_points|safe }},
+                    backgroundColor: grayscalePalette,
+                    borderWidth: 3,
+                    borderColor: '#ffffff',
+                    hoverBorderColor: '#000000',
+                    hoverBorderWidth: 4,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'right',
+                        labels: {
+                            font: {
+                                size: 13,
+                                weight: '600',
+                                family: 'system-ui'
+                            },
+                            color: '#000000',
+                            padding: 15,
+                            boxWidth: 20,
+                            boxHeight: 20,
+                            useBorderRadius: true,
+                            borderRadius: 4
+                        }
+                    },
+                    title: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#000000',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        borderColor: '#000000',
+                        borderWidth: 2,
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13,
+                            weight: 'normal'
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
